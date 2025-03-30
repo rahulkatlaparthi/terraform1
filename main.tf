@@ -2,13 +2,31 @@ provider "azurerm" {
   features {}
 }
 
-# Resource Group
 resource "azurerm_resource_group" "example" {
   name     = "example-resources"
   location = "East US"
 }
 
-# Public IP
+resource "azurerm_virtual_network" "example" {
+  name                = "example-network"
+  address_space       = ["10.0.0.0/16"]
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+}
+
+resource "azurerm_subnet" "example" {
+  name                 = "example-subnet"
+  resource_group_name  = azurerm_resource_group.example.name
+  virtual_network_name = azurerm_virtual_network.example.name
+  address_prefixes     = ["10.0.1.0/24"]
+}
+
+resource "azurerm_network_security_group" "example" {
+  name                = "example-nsg"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+}
+
 resource "azurerm_public_ip" "example" {
   name                = "example-public-ip"
   location            = azurerm_resource_group.example.location
@@ -16,27 +34,26 @@ resource "azurerm_public_ip" "example" {
   allocation_method   = "Static"
 }
 
-# Network Interface
 resource "azurerm_network_interface" "example" {
   name                = "example-nic"
   location            = azurerm_resource_group.example.location
   resource_group_name = azurerm_resource_group.example.name
 
   ip_configuration {
-    name                          = "internal"
+    name                          = "example-nic-config"
+    subnet_id                     = azurerm_subnet.example.id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.example.id
   }
 }
 
-# Windows Virtual Machine
 resource "azurerm_windows_virtual_machine" "example" {
   name                = "example-win-vm"
   resource_group_name = azurerm_resource_group.example.name
   location            = azurerm_resource_group.example.location
   size                = "Standard_B2s"
   admin_username      = "adminuser"
-  admin_password      = "P@ssw0rd123!"  # Change this password
+  admin_password      = "P@ssw0rd123!" # Change this password
   network_interface_ids = [azurerm_network_interface.example.id]
 
   os_disk {
@@ -52,7 +69,6 @@ resource "azurerm_windows_virtual_machine" "example" {
   }
 }
 
-# Output Public IP Address
-output "public_ip" {
+output "public_ip_address" {
   value = azurerm_public_ip.example.ip_address
 }
