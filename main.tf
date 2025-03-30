@@ -33,7 +33,4 @@ resource "azurerm_windows_virtual_machine" "example" {
   }
 }
 
-# Output Private IP Address
-output "private_ip" {
-  value = azurerm_network_interface.example.ip_configuration[0].private_ip_address
-}
+
