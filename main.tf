@@ -46,6 +46,20 @@ resource "azurerm_network_interface" "example" {
     public_ip_address_id          = azurerm_public_ip.example.id
   }
 }
+resource "azurerm_network_security_rule" "rdp" {
+  name                        = "allow-rdp"
+  priority                    = 1000
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "3389"
+  source_address_prefix       = "*"
+  destination_address_prefix  = "*"
+  resource_group_name         = azurerm_resource_group.example.name
+  network_security_group_name = azurerm_network_security_group.example.name
+}
+
 
 resource "azurerm_windows_virtual_machine" "example" {
   name                = "example-win-vm"
