@@ -9,16 +9,7 @@ resource "azurerm_resource_group" "example" {
 }
 
 # Network Interface (No Public IP)
-resource "azurerm_network_interface" "example" {
-  name                = "example-nic"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
 
-  ip_configuration {
-    name                          = "internal"
-    private_ip_address_allocation = "Dynamic"
-  }
-}
 
 # Windows Virtual Machine
 resource "azurerm_windows_virtual_machine" "example" {
@@ -28,7 +19,6 @@ resource "azurerm_windows_virtual_machine" "example" {
   size                = "Standard_B2s"
   admin_username      = "adminuser"
   admin_password      = "P@ssw0rd123!"
-  network_interface_ids = [azurerm_network_interface.example.id]
 
   os_disk {
     caching              = "ReadWrite"
