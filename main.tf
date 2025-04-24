@@ -14,7 +14,7 @@ resource "azurerm_virtual_network" "exagmple" {
   resource_group_name = azurerm_resource_group.example.name
 }
 
-resource "azurerm_subnet" "example" {
+resource "azurerm_subnet" "exampffle" {
   name                 = "example-subnet"
   resource_group_name  = azurerm_resource_group.example.name
   virtual_network_name = azurerm_virtual_network.example.name
