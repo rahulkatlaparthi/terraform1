@@ -27,7 +27,7 @@ resource "azurerm_network_security_group" "example" {
   resource_group_name = azurerm_resource_group.example.name
 }
 
-resource "azurerm_public_ip" "example" {
+resource "azurerm_public_ip" "exfdfgample" {
   name                = "example-public-ip"
   location            = azurerm_resource_group.example.location
   resource_group_name = azurerm_resource_group.example.name
